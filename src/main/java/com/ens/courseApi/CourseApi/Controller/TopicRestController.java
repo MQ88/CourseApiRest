@@ -17,7 +17,41 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ens.courseApi.CourseApi.model.Topic;
 import com.ens.courseApi.CourseApi.service.TopicService;
 
-
+@RestController
 public class TopicRestController {
 
+	@Autowired
+	private TopicService topicService;
+	
+	@GetMapping("/topic")
+	public List<Topic> allTopics()
+	{
+		return topicService.allTopics();
+	}
+	
+	@GetMapping("/topic/{id}")
+	public Topic  Topicbyid(@PathVariable int id)
+	{
+		return topicService.TopicById(id);
+	}
+	
+	@PostMapping("/topic")
+	public ResponseEntity<Object> addTopic(@RequestBody Topic newTopicToadd) throws URISyntaxException
+	{
+		topicService.addTopic(newTopicToadd);
+		return ResponseEntity.created(new URI("/topic"+newTopicToadd.getTopicId())).build();
+	}	
+	
+	@DeleteMapping("/topic/{id}")
+	public void deleteTopic(@PathVariable(name="id") int id)
+	{
+		topicService.deleteTopic(id);
+	}
+	
+	@PutMapping("/topic/{id}")
+	public void updateTopic(@PathVariable(name="id") int id,@RequestBody Topic topicToUpdate)
+	{
+		topicService.updateTopic(topicToUpdate, id);
+	}
+	
 }
